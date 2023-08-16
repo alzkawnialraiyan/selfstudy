@@ -7,8 +7,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.Toolbar;
+
+import androidx.appcompat.widget.PopupMenu;
+import androidx.appcompat.widget.Toolbar;
 
 import java.io.InputStream;
 import java.net.URL;
@@ -18,7 +21,7 @@ public class postadapter extends BaseAdapter {
 
     private List<post> posts;
     private Context context;
-    public void PostAdapter(Context context, List<post> posts) {
+    public postadapter(Context context, List<post> posts) {
         this.context = context;
         this.posts = posts;
     }
@@ -26,7 +29,10 @@ public class postadapter extends BaseAdapter {
 
     @Override
     public int getCount() {
-        return posts.size();
+        if (posts != null) {
+            return posts.size();
+        }
+        return 0;
     }
 
     @Override
@@ -51,6 +57,7 @@ public class postadapter extends BaseAdapter {
         ImageView message = view.findViewById(R.id.letter);
         ImageView send = view.findViewById(R.id.send);
         ImageView bookmark = view.findViewById(R.id.bookmark);
+        EditText comments = view.findViewById(R.id.comments);
 
 
         post p = (post) getItem(i);
@@ -74,6 +81,14 @@ public class postadapter extends BaseAdapter {
             }
         });
 
+        thread.start();
+        toolbar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                PopupMenu popupMenu = new PopupMenu(context, v);
+                popupMenu.inflate(R.menu.threedots);
+            }
+        });
         return view;
     }
 }
